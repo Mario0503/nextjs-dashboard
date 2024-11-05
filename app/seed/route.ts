@@ -1,4 +1,4 @@
- import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
  import { db } from '@vercel/postgres';
  import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
@@ -17,7 +17,7 @@
 
    const insertedUsers = await Promise.all(
      users.map(async (user) => {
-       const hashedPassword = await bcrypt.hash(user.password, 10);
+      const hashedPassword = await bcrypt.hash(user.password, 10);
        return client.sql`
          INSERT INTO users (id, name, email, password)
          VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
@@ -47,7 +47,7 @@
        (invoice) => client.sql`
          INSERT INTO invoices (customer_id, amount, status, date)
          VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status}, ${invoice.date})
-         ON CONFLICT (id) DO NOTHING;
+        ON CONFLICT (id) DO NOTHING;
        `,
      ),
    );
@@ -101,16 +101,15 @@
    return insertedRevenue;
  }
 
-export async function GET() {
-
    try {
      await client.sql`BEGIN`;
-     await seedUsers();
+    await seedUsers();
      await seedCustomers();
      await seedInvoices();
      await seedRevenue();
      await client.sql`COMMIT`;
-       return Response.json({ message: 'Database seeded successfully' });
+
+     return Response.json({ message: 'Database seeded successfully' });
    } catch (error) {
      await client.sql`ROLLBACK`;
      return Response.json({ error }, { status: 500 });
