@@ -110,9 +110,6 @@
      await seedRevenue();
      await client.sql`COMMIT`;
 
-     return Response.json({ message: 'Database seeded successfully' });
-} catch (error) {
-    await client.sql`ROLLBACK`;
-    throw new Error('Database seeding failed'); 
+     
    }
 }
