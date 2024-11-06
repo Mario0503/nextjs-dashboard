@@ -111,5 +111,5 @@
      await client.sql`COMMIT`;
 
      
-   }
+   };
 };
